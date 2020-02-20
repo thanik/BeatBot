@@ -20,7 +20,6 @@ public class Connector : MonoBehaviour
     public List<Vector3> additionalUnpressedPositionCurve;
     public float unpressedEndTime;
 
-    [HideInInspector]
     public List<Vector3> positionCurve;
     public AudioSource pressedSound;
     public bool pressed;
@@ -30,8 +29,13 @@ public class Connector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TryGetComponent<AudioSource>(out pressedSound);
+        TryGetComponent(out pressedSound);
         thisRail = GetComponentInParent<Rail>();
+        if (startTime == 0f && endTime == 0f)
+        {
+            Debug.LogWarning("Connector on rail " + transform.parent.gameObject.name + " start and end time haven't set yet.");
+            gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -43,12 +47,12 @@ public class Connector : MonoBehaviour
             if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.1f)
             {
                 pressed = true;
-                if (Mathf.Abs(diffTime) < 0.02f)
+                if (Mathf.Abs(diffTime) <= 0.02f)
                 {
                     GameController.Instance.judgeText.text = "perfect";
                 }
 
-                else if (Mathf.Abs(diffTime) > 0.05f)
+                else if (Mathf.Abs(diffTime) > 0.02f)
                 {
                     GameController.Instance.judgeText.text = "good:";
                     if (diffTime > 0)

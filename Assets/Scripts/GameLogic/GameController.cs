@@ -149,9 +149,9 @@ public class GameController : Singleton<GameController>
     {
         // calculate curve
         triggeredFrom.positionCurve.Clear();
-        triggeredFrom.positionCurve.Add(playerObject.transform.position);
-        if (triggeredFrom.pressed)
+        if (triggeredFrom.pressed && triggeredFrom.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
         {
+            triggeredFrom.positionCurve.Add(playerObject.transform.position);
             Rail destination = triggeredFrom.pressedToRail;
             Vector3 destinationPos = Vector3.Lerp(destination.transform.position, destination.endPosition, (triggeredFrom.endTime - destination.startTime) / (destination.endTime - destination.startTime));
             if (triggeredFrom.additionalPressedPositionCurve.Count > 0)
@@ -163,12 +163,22 @@ public class GameController : Singleton<GameController>
             }
             else
             {
-                triggeredFrom.positionCurve.Add(new Vector3(destinationPos.x - ((destinationPos.x - playerObject.transform.position.x) / 2.25f), destinationPos.y + 0.5f));
+                if (destinationPos.y >= playerObject.transform.position.y)
+                {
+                    triggeredFrom.positionCurve.Add(new Vector3(destinationPos.x - ((destinationPos.x - playerObject.transform.position.x) / 2.25f), destinationPos.y + 0.5f));
+                }
+                else
+                {
+                    triggeredFrom.positionCurve.Add(new Vector3(destinationPos.x - ((destinationPos.x - playerObject.transform.position.x) / 3), playerObject.transform.position.y + 0.25f));
+                }
             }
             triggeredFrom.positionCurve.Add(destinationPos);
+            spline = new CatmullRom(triggeredFrom.positionCurve.ToArray(), 16, false);
+
         }
-        else
+        else if (!triggeredFrom.pressed && triggeredFrom.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
         {
+            triggeredFrom.positionCurve.Add(playerObject.transform.position);
             Rail destination = triggeredFrom.unpressedToRail;
             float endTime = triggeredFrom.unpressedEndTime > 0 ? triggeredFrom.unpressedEndTime : triggeredFrom.endTime;
             Vector3 destinationPos = Vector3.Lerp(destination.transform.position, destination.endPosition, (endTime - destination.startTime) / (destination.endTime - destination.startTime));
@@ -184,9 +194,9 @@ public class GameController : Singleton<GameController>
                 triggeredFrom.positionCurve.Add(new Vector3(destinationPos.x - ((destinationPos.x - playerObject.transform.position.x) / 3), playerObject.transform.position.y - ((playerObject.transform.position.y - destinationPos.y) / 6)));
             }
             triggeredFrom.positionCurve.Add(destinationPos);
-        }
+            spline = new CatmullRom(triggeredFrom.positionCurve.ToArray(), 16, false);
 
-        spline = new CatmullRom(triggeredFrom.positionCurve.ToArray(), 16, false);
+        }
 
         isOnConnector = true;
         isOnRail = false;

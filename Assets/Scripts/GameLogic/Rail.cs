@@ -14,6 +14,11 @@ public class Rail : MonoBehaviour
     {
         endPosition = new Vector3(transform.position.x + (movingSpeed * endTime), transform.position.y);
         endTime += 0.15f;
+        if (startTime == 0f && endTime == 0f)
+        {
+            Debug.LogWarning("Rail " + gameObject.name + " start and end time haven't set yet.");
+            gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
