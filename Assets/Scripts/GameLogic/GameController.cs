@@ -100,11 +100,13 @@ public class GameController : Singleton<GameController>
             //}
             if (playerObject.transform.position.y < -2)
             {
-                mixer.SetFloat("lowPassFreq", 700);
+                mixer.SetFloat("lowPassFreq", 10000);
+                music.pitch = 0.85f;
             }
             else
             {
                 mixer.SetFloat("lowPassFreq", 20000);
+                music.pitch = 1f;
             }
 
             gameTime += (Time.deltaTime * music.pitch);
