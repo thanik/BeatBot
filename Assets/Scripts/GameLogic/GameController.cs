@@ -53,7 +53,7 @@ public class GameController : Singleton<GameController>
                     float currentLerpTime = (gameTime - currentConnector.startTime) / (currentConnector.endTime - currentConnector.startTime);
                     //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, currentConnector.pressedToRail.transform.position, currentLerpTime);
                     playerObject.transform.position = LerpOverNumber(spline.GetPoints(), currentLerpTime);
-
+                    playerObject.GetComponent<Animator>().SetBool("isJumping", true);
                     if (gameTime > currentConnector.endTime)
                     {
                         // finish connecting to other rail
@@ -80,6 +80,7 @@ public class GameController : Singleton<GameController>
             else if (isOnRail)
             {
                 //playerObject.transform.Translate(Vector3.right * Time.deltaTime * rails[currentRail].movingSpeed);
+                playerObject.GetComponent<Animator>().SetBool("isJumping", false);
                 float currentLerpTime = (gameTime - currentRail.startTime) / (currentRail.endTime - currentRail.startTime);
                 playerObject.transform.position = Vector3.Lerp(currentRail.transform.position, currentRail.endPosition, currentLerpTime);
             }
@@ -100,7 +101,7 @@ public class GameController : Singleton<GameController>
             //}
             if (playerObject.transform.position.y < -2)
             {
-                mixer.SetFloat("lowPassFreq", 10000);
+                mixer.SetFloat("lowPassFreq", 5000);
                 music.pitch = 0.85f;
             }
             else
