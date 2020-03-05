@@ -24,7 +24,15 @@ public class ConnectorDrawInEditor : MonoBehaviour
         {
             thisRail = GetComponentInParent<Rail>();
         }
-        transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisConnector.startTime - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+
+        if (thisConnector.startTime == 0f && thisConnector.endTime == 0f)
+        {
+            Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " has start and end time value at 0.", this);
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisConnector.startTime - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+        }
     }
 
     private void OnDrawGizmos()

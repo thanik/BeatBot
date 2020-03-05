@@ -44,15 +44,15 @@ public class Connector : MonoBehaviour
         if (!finished && thisRail == GameController.Instance.currentRail)
         {
             float diffTime = GameController.Instance.gameTime - startTime;
-            if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.1f)
+            if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.15f)
             {
                 pressed = true;
-                if (Mathf.Abs(diffTime) <= 0.02f)
+                if (Mathf.Abs(diffTime) <= 0.035f)
                 {
                     GameController.Instance.judgeText.text = "perfect";
                 }
 
-                else if (Mathf.Abs(diffTime) > 0.02f)
+                else if (Mathf.Abs(diffTime) > 0.035f)
                 {
                     GameController.Instance.judgeText.text = "good:";
                     if (diffTime > 0)
