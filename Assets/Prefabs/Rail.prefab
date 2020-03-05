@@ -135,3 +135,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3cfb2bd8a08a014c8c293eb1d1ea5ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedTimeWarning: 1
+  unpressedTimeWarning: 0
