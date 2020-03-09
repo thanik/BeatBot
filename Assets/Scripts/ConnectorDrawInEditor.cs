@@ -7,6 +7,11 @@ public class ConnectorDrawInEditor : MonoBehaviour
 {
     private Connector thisConnector;
     private Rail thisRail;
+
+    [InspectorName("Connector's pressed end time warning")]
+    public bool pressedTimeWarning;
+    [InspectorName("Connector's unpressed end time warning")]
+    public bool unpressedTimeWarning;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +29,25 @@ public class ConnectorDrawInEditor : MonoBehaviour
         {
             thisRail = GetComponentInParent<Rail>();
         }
-        transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisConnector.startTime - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+
+        if (thisConnector.startTime == 0f && thisConnector.endTime == 0f)
+        {
+            Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " has start and end time value at 0.", this);
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisConnector.startTime - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+        }
+
+        if (pressedTimeWarning && thisConnector.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL && thisConnector.endTime != thisConnector.pressedToRail.startTime)
+        {
+            Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " pressed end time doesn't match with rail's start time.", this);
+        }
+
+        if (unpressedTimeWarning && thisConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL && thisConnector.unpressedEndTime != thisConnector.unpressedToRail.startTime)
+        {
+            Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " unpressed end time doesn't match with rail's start time.", this);
+        }
     }
 
     private void OnDrawGizmos()

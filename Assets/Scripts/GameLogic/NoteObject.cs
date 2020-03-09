@@ -29,15 +29,15 @@ public class NoteObject : MonoBehaviour
             if (noteType == NoteObjectTypeEnum.HIT)
             {
                 float diffTime = GameController.Instance.gameTime - time;
-                if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.15f)
+                if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.1f)
                 {
                     pressed = true;
-                    if (Mathf.Abs(diffTime) < 0.02f)
+                    if (Mathf.Abs(diffTime) <= 0.03f)
                     {
                         GameController.Instance.judgeText.text = "perfect";
                     }
 
-                    else if (Mathf.Abs(diffTime) > 0.05f)
+                    else if (Mathf.Abs(diffTime) > 0.03f)
                     {
                         GameController.Instance.judgeText.text = "good:";
                         if (diffTime > 0)
@@ -63,7 +63,7 @@ public class NoteObject : MonoBehaviour
                     finished = true;
                 }
 
-                if (!pressed && diffTime > 0.15f)
+                if (!pressed && diffTime > 0.1f)
                 {
                     // missed
                     Debug.Log("missed! " + diffTime);

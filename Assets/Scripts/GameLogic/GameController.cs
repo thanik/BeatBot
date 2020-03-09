@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using TMPro;
 using JPBotelho;
+using DG.Tweening;
 
 public class GameController : Singleton<GameController>
 {
@@ -34,6 +35,8 @@ public class GameController : Singleton<GameController>
     private AudioSource music;
     private Vector3 cameraOffset = Vector3.zero;
 
+    private bool fallTrigger = false;
+    private bool stillInWater = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -101,15 +104,24 @@ public class GameController : Singleton<GameController>
             //{
             //    if (areaData.topCorner)
             //}
-            if (playerObject.transform.position.y < -2)
+            if (playerObject.transform.position.y < -2 && !stillInWater)
             {
-                mixer.SetFloat("lowPassFreq", 5000);
-                music.pitch = 0.85f;
+                fallTrigger = true;
+                mixer.SetFloat("lowPassFreq", 4000);
             }
-            else
+            else if (playerObject.transform.position.y > -2)
             {
+                stillInWater = false;
                 mixer.SetFloat("lowPassFreq", 20000);
                 music.pitch = 1f;
+            }
+
+            if(fallTrigger)
+            {
+                stillInWater = true;
+                fallTrigger = false;
+                music.pitch = 0.5f;
+                //music.DOPitch(1f, 4f);
             }
 
             gameTime += (Time.deltaTime * music.pitch);

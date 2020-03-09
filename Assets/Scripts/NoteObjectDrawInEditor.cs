@@ -24,7 +24,15 @@ public class NoteObjectDrawInEditor : MonoBehaviour
         {
             thisRail = GetComponentInParent<Rail>();
         }
-        transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisNote.time - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
 
+        if (thisNote.time == 0f)
+        {
+            Debug.LogWarning("A note named \"" + thisNote.name + "\" on rail named " + thisRail.name + " has time value at 0.", this);
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisNote.time - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+
+        }
     }
 }

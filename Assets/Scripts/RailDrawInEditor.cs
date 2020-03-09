@@ -19,6 +19,10 @@ public class RailDrawInEditor : MonoBehaviour
     {
         Vector3 endPosition = new Vector3(transform.position.x + (thisRail.movingSpeed * (thisRail.endTime - thisRail.startTime)), transform.position.y);
         thisRail.endPosition = endPosition;
+        if (thisRail.startTime == 0f && thisRail.endTime == 0f)
+        {
+            Debug.LogWarning("A rail named \"" + thisRail.name + "\" has start and end time value at 0.", this);
+        }
     }
 
     private void OnDrawGizmos()
