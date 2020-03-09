@@ -16,6 +16,8 @@ public class GameController : Singleton<GameController>
     public bool isOnConnector;
     public bool isOnRail;
     public int score;
+    public int collectibleGot;
+    public int collectibleCount;
     
     public List<Rail> rails;
     public List<AreaData> areas;
@@ -204,6 +206,15 @@ public class GameController : Singleton<GameController>
         isOnConnector = true;
         isOnRail = false;
         currentConnector = triggeredFrom;
+
+        if (triggeredFrom.pressed)
+        {
+            score += triggeredFrom.pressedScore;
+        }
+        else
+        {
+            score += triggeredFrom.unpressedScore;
+        }
     }
 
     IEnumerator startPlaying()

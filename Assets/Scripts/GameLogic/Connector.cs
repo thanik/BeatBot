@@ -14,11 +14,13 @@ public class Connector : MonoBehaviour
     public ConnectorActionEnum pressedAction;
     public Rail pressedToRail;
     public List<Vector3> additionalPressedPositionCurve;
+    public int pressedScore;
 
     public ConnectorActionEnum unpressedAction;
     public Rail unpressedToRail;
     public List<Vector3> additionalUnpressedPositionCurve;
     public float unpressedEndTime;
+    public int unpressedScore;
 
     public List<Vector3> positionCurve;
     public AudioSource pressedSound;
