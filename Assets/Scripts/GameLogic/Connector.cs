@@ -52,11 +52,13 @@ public class Connector : MonoBehaviour
                 if (Mathf.Abs(diffTime) <= 0.035f)
                 {
                     GameController.Instance.judgeText.text = "perfect";
+                    GameController.Instance.score += pressedScore;
                 }
 
                 else if (Mathf.Abs(diffTime) > 0.035f)
                 {
                     GameController.Instance.judgeText.text = "good:";
+                    GameController.Instance.score += pressedScore / 2;
                     if (diffTime > 0)
                     {
                         Debug.Log("pressed! LATE:" + diffTime);

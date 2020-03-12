@@ -121,7 +121,7 @@ public class GameController : Singleton<GameController>
                 stillInWater = true;
                 fallTrigger = false;
                 music.pitch = 0.5f;
-                //music.DOPitch(1f, 4f);
+                music.DOPitch(1f, 4f);
             }
 
             gameTime += (Time.deltaTime * music.pitch);
@@ -218,15 +218,6 @@ public class GameController : Singleton<GameController>
         isOnConnector = true;
         isOnRail = false;
         currentConnector = triggeredFrom;
-
-        if (triggeredFrom.pressed)
-        {
-            score += triggeredFrom.pressedScore;
-        }
-        else
-        {
-            score += triggeredFrom.unpressedScore;
-        }
     }
 
     IEnumerator startPlaying()

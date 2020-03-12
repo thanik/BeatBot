@@ -115,10 +115,12 @@ MonoBehaviour:
   pressedAction: 1
   pressedToRail: {fileID: 0}
   additionalPressedPositionCurve: []
+  pressedScore: 100
   unpressedAction: 1
   unpressedToRail: {fileID: 0}
   additionalUnpressedPositionCurve: []
   unpressedEndTime: 0
+  unpressedScore: 0
   positionCurve: []
   pressedSound: {fileID: 0}
   pressed: 0

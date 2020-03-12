@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 11340347}
   - component: {fileID: 11340349}
   - component: {fileID: 11340348}
+  - component: {fileID: 11340350}
   m_Layer: 5
   m_Name: ScoreText
   m_TagString: Untagged
@@ -276,6 +277,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11340346}
   m_CullTransparentMesh: 0
+--- !u!114 &11340350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11340346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6c52d4860a6bb42be514ed572b9aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &45137938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3791,10 +3804,12 @@ MonoBehaviour:
   pressedAction: 1
   pressedToRail: {fileID: 2060387390}
   additionalPressedPositionCurve: []
+  pressedScore: 100
   unpressedAction: 0
   unpressedToRail: {fileID: 0}
   additionalUnpressedPositionCurve: []
   unpressedEndTime: 15.376
+  unpressedScore: 0
   positionCurve: []
   pressedSound: {fileID: 0}
   pressed: 0

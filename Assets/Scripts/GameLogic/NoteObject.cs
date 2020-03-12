@@ -61,6 +61,7 @@ public class NoteObject : MonoBehaviour
                         spriteRenderer.enabled = false;
                     }
                     finished = true;
+                    GameController.Instance.collectibleGot++;
                 }
 
                 if (!pressed && diffTime > 0.1f)
