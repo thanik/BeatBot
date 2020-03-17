@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
         music = GetComponent<AudioSource>();
         currentRail = FindObjectOfType<LevelSettings>().startRail;
         // gather all level objects
-
+        StartCoroutine(startPlaying());
     }
 
     // Update is called once per frame
