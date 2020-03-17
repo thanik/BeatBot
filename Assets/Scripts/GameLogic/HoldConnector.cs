@@ -4,7 +4,28 @@ using UnityEngine;
 
 public class HoldConnector : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public string buttonName;
+
+    public float startTime;
+    public float endTime;
+
+    public ConnectorActionEnum pressedAction;
+    public Rail pressedToRail;
+    public List<Vector3> additionalPressedPositionCurve;
+    public int pressedScore;
+
+    public ConnectorActionEnum unpressedAction;
+    public Rail unpressedToRail;
+    public List<Vector3> additionalUnpressedPositionCurve;
+    public float unpressedEndTime;
+    public int unpressedScore;
+
+    public List<Vector3> positionCurve;
+    public AudioSource pressedSound;
+    public bool pressed;
+    public bool finished;
+
+    private Rail thisRail;
     void Start()
     {
         

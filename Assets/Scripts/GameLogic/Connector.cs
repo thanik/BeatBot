@@ -28,6 +28,7 @@ public class Connector : MonoBehaviour
     public bool finished;
 
     private Rail thisRail;
+    GameController gmCtrl;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,39 +39,43 @@ public class Connector : MonoBehaviour
             Debug.LogWarning("Connector on rail " + transform.parent.gameObject.name + " start and end time haven't set yet.");
             gameObject.SetActive(false);
         }
+        gmCtrl = FindObjectOfType<GameController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!finished && thisRail == GameController.Instance.currentRail)
+        if (!finished && thisRail == gmCtrl.currentRail)
         {
-            float diffTime = GameController.Instance.gameTime - startTime;
+            float diffTime = gmCtrl.gameTime - startTime;
             if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.15f)
             {
                 pressed = true;
                 if (Mathf.Abs(diffTime) <= 0.035f)
                 {
-                    GameController.Instance.judgeText.text = "perfect";
-                    GameController.Instance.score += pressedScore;
+                    gmCtrl.judgeText.text = "perfect";
+                    gmCtrl.score += pressedScore;
+                    gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(0);
                 }
 
                 else if (Mathf.Abs(diffTime) > 0.035f)
                 {
-                    GameController.Instance.judgeText.text = "good:";
-                    GameController.Instance.score += pressedScore / 2;
+                    gmCtrl.judgeText.text = "good:";
+                    gmCtrl.score += pressedScore / 2;
                     if (diffTime > 0)
                     {
                         Debug.Log("pressed! LATE:" + diffTime);
-                        GameController.Instance.judgeText.text += "late";
+                        gmCtrl.judgeText.text += "late";
+                        gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(2);
                     }
                     else
                     {
                         Debug.Log("pressed! EARLY:" + diffTime);
-                        GameController.Instance.judgeText.text += "early";
+                        gmCtrl.judgeText.text += "early";
+                        gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(1);
                     }
                 }
-                GameController.Instance.connectorTrigger(this);
+                gmCtrl.connectorTrigger(this);
                 finished = true;
             }
             
@@ -78,8 +83,8 @@ public class Connector : MonoBehaviour
             {
                 // missed
                 //Debug.Log("missed! " + diffTime);
-                GameController.Instance.judgeText.text = "miss";
-                GameController.Instance.connectorTrigger(this);
+                gmCtrl.judgeText.text = "miss";
+                gmCtrl.connectorTrigger(this);
                 finished = true;
             }
         }

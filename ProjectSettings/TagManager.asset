@@ -56,3 +56,6 @@ TagManager:
   - name: Water
     uniqueID: 205912419
     locked: 0
+  - name: Judgement
+    uniqueID: 2061631233
+    locked: 0

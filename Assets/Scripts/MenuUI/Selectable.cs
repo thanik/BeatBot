@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Selectable : MonoBehaviour
 {
@@ -18,11 +19,11 @@ public class Selectable : MonoBehaviour
     {
        if (page.currentButton == this)
         {
-            GetComponent<SpriteRenderer>().sprite = selected;
+            GetComponent<Image>().sprite = selected;
         }
        else
         {
-            GetComponent<SpriteRenderer>().sprite = unselected;
+            GetComponent<Image>().sprite = unselected;
         }
     }
 }

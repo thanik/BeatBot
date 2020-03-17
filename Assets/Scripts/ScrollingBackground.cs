@@ -11,17 +11,19 @@ public class ScrollingBackground : MonoBehaviour
     private float moveX;
     private float cameraY;
     private Camera mainCamera;
+    GameController gmCtrl;
     // Start is called before the first frame update
     void Start()
     {
         backgrounds = GetComponentsInChildren<Transform>();
         mainCamera = Camera.main;
+        gmCtrl = FindObjectOfType<GameController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (backgrounds.Length > 2 && GameController.Instance.isPlaying)
+        if (backgrounds.Length > 2 && gmCtrl.isPlaying && gmCtrl.gameTime > gmCtrl.timeToLockCamera)
         {
             moveX = (-Time.deltaTime * scollingSpeed);
             for (int i = 1; i < backgrounds.Length; i++)
