@@ -9,10 +9,13 @@ public class Rail : MonoBehaviour
     public float startTime;
     public float endTime;
     public Vector3 endPosition;
+
+    public PlatformTypeEnum platformType;
+    public PlatformSizeEnum platformSize;
     // Start is called before the first frame update
     void Start()
     {
-        endPosition = new Vector3(transform.position.x + (movingSpeed * endTime), transform.position.y);
+        endPosition = new Vector3(transform.position.x + (movingSpeed * (endTime - startTime)), transform.position.y);
         endTime += 0.15f;
         if (startTime == 0f && endTime == 0f)
         {

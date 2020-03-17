@@ -13,42 +13,47 @@ public class NoteObject : MonoBehaviour
 
     private Rail thisRail;
     private SpriteRenderer spriteRenderer;
+    GameController gmCtrl;
     // Start is called before the first frame update
     void Start()
     {
         TryGetComponent<AudioSource>(out pressedSound);
         TryGetComponent<SpriteRenderer>(out spriteRenderer);
         thisRail = GetComponentInParent<Rail>();
+        gmCtrl = FindObjectOfType<GameController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!finished && thisRail == GameController.Instance.currentRail)
+        if (!finished && thisRail == FindObjectOfType<GameController>().currentRail)
         {
             if (noteType == NoteObjectTypeEnum.HIT)
             {
-                float diffTime = GameController.Instance.gameTime - time;
+                float diffTime = gmCtrl.gameTime - time;
                 if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.1f)
                 {
                     pressed = true;
                     if (Mathf.Abs(diffTime) <= 0.03f)
                     {
-                        GameController.Instance.judgeText.text = "perfect";
+                        gmCtrl.judgeText.text = "perfect";
+                        gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(0);
                     }
 
                     else if (Mathf.Abs(diffTime) > 0.03f)
                     {
-                        GameController.Instance.judgeText.text = "good:";
+                        FindObjectOfType<GameController>().judgeText.text = "good:";
                         if (diffTime > 0)
                         {
                             Debug.Log("pressed! LATE:" + diffTime);
-                            GameController.Instance.judgeText.text += "late";
+                            gmCtrl.judgeText.text += "late";
+                            gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(2);
                         }
                         else
                         {
                             Debug.Log("pressed! EARLY:" + diffTime);
-                            GameController.Instance.judgeText.text += "early";
+                            gmCtrl.judgeText.text += "early";
+                            gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(1);
                         }
                     }
 
@@ -61,20 +66,21 @@ public class NoteObject : MonoBehaviour
                         spriteRenderer.enabled = false;
                     }
                     finished = true;
-                    GameController.Instance.collectibleGot++;
+                    gmCtrl.collectibleGot++;
                 }
 
                 if (!pressed && diffTime > 0.1f)
                 {
                     // missed
                     Debug.Log("missed! " + diffTime);
-                    GameController.Instance.judgeText.text = "miss";
+                    gmCtrl.judgeText.text = "miss";
+                    gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(3);
                     finished = true;
                 }
             }
             else if (noteType == NoteObjectTypeEnum.HOVER)
             {
-                if (GameController.Instance.gameTime > time)
+                if (gmCtrl.gameTime > time)
                 {
 
                     if (spriteRenderer)
@@ -91,7 +97,7 @@ public class NoteObject : MonoBehaviour
                 }
             }
         }
-        else if (GameController.Instance.gameTime > time + 2f)
+        else if (gmCtrl.gameTime > time + 2f)
         {
             gameObject.SetActive(false);
         }

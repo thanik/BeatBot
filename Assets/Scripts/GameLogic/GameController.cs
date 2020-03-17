@@ -6,19 +6,21 @@ using TMPro;
 using JPBotelho;
 using DG.Tweening;
 
-public class GameController : Singleton<GameController>
+public class GameController : MonoBehaviour
 {
     public GameObject playerObject;
     public Camera mainCamera;
     public TMP_Text debugText;
     public TMP_Text judgeText;
     public AudioMixer mixer;
+    public Canvas pauseMenu;
     public bool isPlaying;
     public bool isOnConnector;
     public bool isOnRail;
     public int score;
     public int collectibleGot;
     public int collectibleCount;
+    public int combo;
     
     public List<Rail> rails;
     public List<AreaData> areas;
@@ -41,6 +43,7 @@ public class GameController : Singleton<GameController>
     void Start()
     {
         music = GetComponent<AudioSource>();
+        currentRail = FindObjectOfType<LevelSettings>().startRail;
         // gather all level objects
 
     }
@@ -160,6 +163,29 @@ public class GameController : Singleton<GameController>
             StartCoroutine(startPlaying());
             
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            togglePause();
+        }
+    }
+
+    public void togglePause()
+    {
+        if (isPlaying)
+        {
+            isPlaying = false;
+            pauseMenu.gameObject.SetActive(true);
+            pauseMenu.GetComponent<Page>().currentButtonIndex = 0;
+            pauseMenu.GetComponent<Page>().currentButton = pauseMenu.GetComponent<Page>().buttons[pauseMenu.GetComponent<Page>().currentButtonIndex];
+            music.Pause();
+        }
+        else
+        {
+            isPlaying = true;
+            pauseMenu.gameObject.SetActive(false);
+            music.Play();
+        }
     }
     
     public void connectorTrigger(Connector triggeredFrom)
@@ -225,6 +251,18 @@ public class GameController : Singleton<GameController>
         music.PlayScheduled(AudioSettings.dspTime + 1f);
         yield return new WaitForSeconds(1f);
         isPlaying = true;
+    }
+
+    public void resetLevel()
+    {
+        mixer.SetFloat("lowPassFreq", 20000);
+        music.pitch = 1f;
+        gameTime = 0f;
+        cameraOffset = Vector3.zero;
+
+        fallTrigger = false;
+        stillInWater = false;
+        // currentRail = startRail;
     }
 
     public Vector3 LerpOverNumber(Vector3[] vectors, float time)
