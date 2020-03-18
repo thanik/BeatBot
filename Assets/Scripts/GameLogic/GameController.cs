@@ -21,8 +21,7 @@ public class GameController : MonoBehaviour
     public int collectibleGot;
     public int collectibleCount;
     public int combo;
-    
-    public List<Rail> rails;
+
     public List<AreaData> areas;
     public float timeToLockCamera;
     public float bpm;
@@ -157,12 +156,12 @@ public class GameController : MonoBehaviour
             debugText.text = debugString;
         }
 
-        if (Input.GetKeyDown(KeyCode.P) && !isPlaying)
-        {
+        //if (Input.GetKeyDown(KeyCode.P) && !isPlaying)
+        //{
             
-            StartCoroutine(startPlaying());
+        //    StartCoroutine(startPlaying());
             
-        }
+        //}
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -248,20 +247,22 @@ public class GameController : MonoBehaviour
 
     IEnumerator startPlaying()
     {
-        music.PlayScheduled(AudioSettings.dspTime + 1f);
+        music.PlayScheduled(AudioSettings.dspTime);
+        music.volume = 0f;
         yield return new WaitForSeconds(1f);
+        music.volume = 1f;
         isPlaying = true;
     }
 
     public void resetLevel()
     {
         mixer.SetFloat("lowPassFreq", 20000);
-        music.pitch = 1f;
-        gameTime = 0f;
-        cameraOffset = Vector3.zero;
+        //music.pitch = 1f;
+        //gameTime = 0f;
+        //cameraOffset = Vector3.zero;
 
-        fallTrigger = false;
-        stillInWater = false;
+        //fallTrigger = false;
+        //stillInWater = false;
         // currentRail = startRail;
     }
 

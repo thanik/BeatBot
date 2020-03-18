@@ -55,6 +55,7 @@ public class PauseMenuSelector : MonoBehaviour
                     break;
                 case "restart":
                     parentPage.gameObject.SetActive(false);
+                    FindObjectOfType<GameController>().resetLevel();
                     FindObjectOfType<SceneLoader>().transitionToOtherScene(1);
                     break;
                 case "quit":

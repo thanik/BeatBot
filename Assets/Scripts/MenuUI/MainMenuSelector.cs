@@ -9,11 +9,16 @@ public class MainMenuSelector : MonoBehaviour
     public AudioSource backgroundMusic;
     public float yOffset;
     public float jumpPower;
+
     // Start is called before the first frame update
     void Start()
     {
         parentPage = GetComponentInParent<Page>();
         backgroundMusic.DOFade(1f, 0.25f);
+
+        float multiplier = (float) Screen.height / 1080;
+        yOffset *= multiplier;
+        jumpPower *= multiplier;
         //currentButton = parentPage.buttons[currentButtonIndex];
         //Vector3 currentButtonPos = currentButton.transform.position;
         //transform.position = new Vector3(currentButtonPos.x, currentButtonPos.y + 1.5f, currentButtonPos.z);
