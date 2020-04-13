@@ -5,6 +5,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class NoteObjectDrawInEditor : MonoBehaviour
 {
+    public float yOffset;
     private NoteObject thisNote;
     private Rail thisRail;
     // Start is called before the first frame update
@@ -31,7 +32,9 @@ public class NoteObjectDrawInEditor : MonoBehaviour
         }
         else
         {
-            transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisNote.time - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+            Vector3 calculatedPos = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisNote.time - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+            calculatedPos.y += yOffset;
+            transform.position = calculatedPos;
 
         }
     }

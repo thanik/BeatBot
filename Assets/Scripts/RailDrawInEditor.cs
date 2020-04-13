@@ -17,8 +17,13 @@ public class RailDrawInEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 endPosition = new Vector3(transform.position.x + (thisRail.movingSpeed * (thisRail.endTime - thisRail.startTime)), transform.position.y);
-        thisRail.endPosition = endPosition;
+        //Vector3 endPosition = new Vector3(transform.position.x + (thisRail.movingSpeed * (thisRail.endTime - thisRail.startTime)), transform.position.y);
+        //thisRail.endPosition = endPosition;
+        if (transform.position.y != thisRail.endPosition.y)
+        {
+            thisRail.endPosition.y = transform.position.y;
+        }
+
         if (thisRail.startTime == 0f && thisRail.endTime == 0f)
         {
             Debug.LogWarning("A rail named \"" + thisRail.name + "\" has start and end time value at 0.", this);

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Connector : MonoBehaviour
 {
-    public int id;
-    public int railId;
     public string buttonName;
 
     public float startTime;
+    public float holdUntilTime;
     public float endTime;
 
     public ConnectorActionEnum pressedAction;
@@ -48,6 +47,11 @@ public class Connector : MonoBehaviour
         if (!finished && thisRail == gmCtrl.currentRail)
         {
             float diffTime = gmCtrl.gameTime - startTime;
+            if (Mathf.Abs(diffTime) <= 0.2f)
+            {
+                gmCtrl.playerObject.GetComponent<Animator>().SetBool("isNearConnector", true);
+            }
+
             if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.15f)
             {
                 pressed = true;
@@ -77,6 +81,7 @@ public class Connector : MonoBehaviour
                 }
                 gmCtrl.connectorTrigger(this);
                 finished = true;
+                gmCtrl.playerObject.GetComponent<Animator>().SetBool("isNearConnector", false);
             }
             
             if (!pressed && diffTime > 0.15f)
@@ -86,6 +91,7 @@ public class Connector : MonoBehaviour
                 gmCtrl.judgeText.text = "miss";
                 gmCtrl.connectorTrigger(this);
                 finished = true;
+                gmCtrl.playerObject.GetComponent<Animator>().SetBool("isNearConnector", false);
             }
         }
     }

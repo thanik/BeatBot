@@ -21,13 +21,14 @@ public class PlatformSpawner : MonoBehaviour
             Destroy(platform.gameObject);
         }
         thisRail = GetComponentInParent<Rail>();
-        length = thisRail.movingSpeed * (thisRail.endTime - thisRail.startTime);
+        //length = thisRail.movingSpeed * (thisRail.endTime - thisRail.startTime);
     }
 
     // Update is called once per frame
     void Update()
     {
-        length = thisRail.movingSpeed * (thisRail.endTime - thisRail.startTime);
+        //length = thisRail.movingSpeed * (thisRail.endTime - thisRail.startTime);
+        length = thisRail.endPosition.x - thisRail.transform.position.x;
         if (lastCalculatedLength != length || lastPlatformType != thisRail.platformType || lastPlatformSize != thisRail.platformSize)
         {
             

@@ -77,7 +77,14 @@ public class ConnectorDrawInEditor : MonoBehaviour
                 Gizmos.color = new Color(0, 1, 0, 0.5f);
                 //Gizmos.DrawLine(transform.position, thisConnector.pressedToRail.transform.position);
                 Rail destination = thisConnector.pressedToRail;
-                Gizmos.DrawLine(transform.position, Vector3.Lerp(destination.transform.position, destination.endPosition, (thisConnector.endTime - destination.startTime) / (destination.endTime - destination.startTime)));
+                if (thisConnector.holdUntilTime > 0)
+                {
+                    Gizmos.DrawLine(Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisConnector.holdUntilTime - thisRail.startTime) / (thisRail.endTime - thisRail.startTime)), Vector3.Lerp(destination.transform.position, destination.endPosition, (thisConnector.endTime - destination.startTime) / (destination.endTime - destination.startTime)));
+                }
+                else
+                {
+                    Gizmos.DrawLine(transform.position, Vector3.Lerp(destination.transform.position, destination.endPosition, (thisConnector.endTime - destination.startTime) / (destination.endTime - destination.startTime)));
+                }
             }
 
             if (thisConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL && thisConnector.unpressedToRail)

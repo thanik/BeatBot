@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2619620165192786665}
   - component: {fileID: 2619620165192786666}
   m_Layer: 0
-  m_Name: CoinNoteObject
+  m_Name: AutoCollectObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 4637773788965659580, guid: 0183ed3dc3060ce408c7be9b3e02c2d3,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 34a419e69342a6242a3f7955c2297eb0, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 74a424252dad53345901486008d9d88f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -188,8 +188,7 @@ SpriteRenderer:
   m_SortingLayerID: 2119641445
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5074137192859019986, guid: fe164203dcf6ca649b2161c6eaa5dc27,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 50988c040e40d06409e8b8353920fb59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -212,3 +211,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d404a66df9359d4db9d6b8ecd3bf0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  yOffset: -0.2

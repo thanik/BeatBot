@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
 {
     public GameObject playerObject;
     public Camera mainCamera;
+    public ChargeIndicatorUI chargeIndicator;
     public TMP_Text debugText;
     public TMP_Text judgeText;
     public AudioMixer mixer;
@@ -38,6 +39,9 @@ public class GameController : MonoBehaviour
 
     private bool fallTrigger = false;
     private bool stillInWater = false;
+    private float holdTime = 0f;
+    private bool releaseInTime = false;
+    private float health;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,35 +58,106 @@ public class GameController : MonoBehaviour
         {
             if (isOnConnector)
             {
-                
-                if (currentConnector.pressed && currentConnector.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+                if (currentConnector.holdUntilTime > 0)
                 {
-                    float currentLerpTime = (gameTime - currentConnector.startTime) / (currentConnector.endTime - currentConnector.startTime);
-                    //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, currentConnector.pressedToRail.transform.position, currentLerpTime);
-                    playerObject.transform.position = LerpOverNumber(spline.GetPoints(), currentLerpTime);
-                    playerObject.GetComponent<Animator>().SetBool("isJumping", true);
-                    if (gameTime > currentConnector.endTime)
+                    if (Input.GetButton(currentConnector.buttonName))
                     {
-                        // finish connecting to other rail
-                        currentRail = currentConnector.pressedToRail;
+                        chargeIndicator.gameObject.SetActive(true);
+                        holdTime += Time.deltaTime;
+                    }
+                    chargeIndicator.updateChargeBar(0, holdTime, currentConnector.holdUntilTime - currentConnector.startTime);
+                    float currentLerpTime = (gameTime - currentRail.startTime) / (currentRail.endTime - currentRail.startTime);
+                    playerObject.transform.position = Vector3.Lerp(currentRail.transform.position, currentRail.endPosition, currentLerpTime);
+
+                    if (Input.GetButtonUp(currentConnector.buttonName))
+                    {
+                        if(Mathf.Abs(holdTime - (currentConnector.holdUntilTime - currentConnector.startTime)) < 0.2f)
+                        {
+                            releaseInTime = true;
+                        }
+                        calculateMovementCurve(currentConnector, currentConnector.pressed && releaseInTime);
+                    }
+
+                    if ((!releaseInTime && currentConnector.pressed && Input.GetButtonUp(currentConnector.buttonName)) || (releaseInTime && currentConnector.pressed) || (gameTime - currentConnector.startTime > 0.15f && !currentConnector.pressed))
+                    {
+                        if (currentConnector.pressed && releaseInTime && currentConnector.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+                        {
+                            Debug.Log("releaseInTime");
+                            currentLerpTime = (gameTime - currentConnector.holdUntilTime) / (currentConnector.endTime - currentConnector.holdUntilTime);
+                            //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, currentConnector.pressedToRail.transform.position, currentLerpTime);
+                            playerObject.transform.position = LerpOverNumber(spline.GetPoints(), currentLerpTime);
+                            playerObject.GetComponent<Animator>().SetBool("isJumping", true);
+                            if (gameTime > currentConnector.endTime)
+                            {
+                                // finish connecting to other rail
+                                currentRail = currentConnector.pressedToRail;
+                                isOnConnector = false;
+                                isOnRail = true;
+                                releaseInTime = false;
+
+                            }
+                        }
+                        else if (currentConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+                        {
+                            Debug.Log("release missed");
+                            float endTime = currentConnector.unpressedEndTime > 0 ? currentConnector.unpressedEndTime : currentConnector.endTime;
+                            currentLerpTime = (gameTime - currentConnector.startTime) / (endTime - currentConnector.startTime);
+                            //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, Vector3.Lerp(currentConnector.unpressedToRail.transform.position, currentConnector.unpressedToRail.endPosition, (endTime - currentConnector.unpressedToRail.startTime) / (currentConnector.unpressedToRail.endTime - currentConnector.unpressedToRail.startTime)), currentLerpTime);
+                            playerObject.transform.position = LerpOverNumber(spline.GetPoints(), currentLerpTime);
+                            if (gameTime > endTime)
+                            {
+                                // finish connecting to other rail
+                                currentRail = currentConnector.unpressedToRail;
+                                isOnConnector = false;
+                                isOnRail = true;
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("release missed");
+                            isOnConnector = false;
+                            isOnRail = true;
+                        }
+                        chargeIndicator.gameObject.SetActive(false);
+                    }
+                }
+                else
+                {
+                    if (currentConnector.pressed && currentConnector.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+                    {
+                        float currentLerpTime = (gameTime - currentConnector.startTime) / (currentConnector.endTime - currentConnector.startTime);
+                        //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, currentConnector.pressedToRail.transform.position, currentLerpTime);
+                        playerObject.transform.position = LerpOverNumber(spline.GetPoints(), currentLerpTime);
+                        playerObject.GetComponent<Animator>().SetBool("isJumping", true);
+                        if (gameTime > currentConnector.endTime)
+                        {
+                            // finish connecting to other rail
+                            currentRail = currentConnector.pressedToRail;
+                            isOnConnector = false;
+                            isOnRail = true;
+                        }
+                    }
+                    else if (currentConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+                    {
+                        float endTime = currentConnector.unpressedEndTime > 0 ? currentConnector.unpressedEndTime : currentConnector.endTime;
+                        float currentLerpTime = (gameTime - currentConnector.startTime) / (endTime - currentConnector.startTime);
+                        //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, Vector3.Lerp(currentConnector.unpressedToRail.transform.position, currentConnector.unpressedToRail.endPosition, (endTime - currentConnector.unpressedToRail.startTime) / (currentConnector.unpressedToRail.endTime - currentConnector.unpressedToRail.startTime)), currentLerpTime);
+                        playerObject.transform.position = LerpOverNumber(spline.GetPoints(), currentLerpTime);
+                        if (gameTime > endTime)
+                        {
+                            // finish connecting to other rail
+                            currentRail = currentConnector.unpressedToRail;
+                            isOnConnector = false;
+                            isOnRail = true;
+                        }
+                    }
+                    else if (currentConnector.finished && currentConnector.unpressedAction == ConnectorActionEnum.NOTHING)
+                    {
                         isOnConnector = false;
                         isOnRail = true;
                     }
                 }
-                else if (currentConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
-                {
-                    float endTime = currentConnector.unpressedEndTime > 0 ? currentConnector.unpressedEndTime : currentConnector.endTime;
-                    float currentLerpTime = (gameTime - currentConnector.startTime) / (endTime - currentConnector.startTime);
-                    //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, Vector3.Lerp(currentConnector.unpressedToRail.transform.position, currentConnector.unpressedToRail.endPosition, (endTime - currentConnector.unpressedToRail.startTime) / (currentConnector.unpressedToRail.endTime - currentConnector.unpressedToRail.startTime)), currentLerpTime);
-                    playerObject.transform.position = LerpOverNumber(spline.GetPoints(), currentLerpTime);
-                    if (gameTime > endTime)
-                    {
-                        // finish connecting to other rail
-                        currentRail = currentConnector.unpressedToRail;
-                        isOnConnector = false;
-                        isOnRail = true;
-                    }
-                }
+                playerObject.GetComponent<Animator>().SetBool("isNearConnector", false);
             }
             else if (isOnRail)
             {
@@ -177,6 +252,7 @@ public class GameController : MonoBehaviour
             pauseMenu.gameObject.SetActive(true);
             pauseMenu.GetComponent<Page>().currentButtonIndex = 0;
             pauseMenu.GetComponent<Page>().currentButton = pauseMenu.GetComponent<Page>().buttons[pauseMenu.GetComponent<Page>().currentButtonIndex];
+            pauseMenu.GetComponent<AudioSource>().Play();
             music.Pause();
         }
         else
@@ -189,9 +265,22 @@ public class GameController : MonoBehaviour
     
     public void connectorTrigger(Connector triggeredFrom)
     {
+        isOnConnector = true;
+        isOnRail = false;
+        releaseInTime = false;
+        holdTime = 0f;
+        currentConnector = triggeredFrom;
+        if (triggeredFrom.holdUntilTime <= 0)
+        {
+            calculateMovementCurve(triggeredFrom, triggeredFrom.pressed);
+        }
+    }
+
+    public void calculateMovementCurve(Connector triggeredFrom, bool pressed)
+    {
         // calculate curve
         triggeredFrom.positionCurve.Clear();
-        if (triggeredFrom.pressed && triggeredFrom.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+        if (pressed && triggeredFrom.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
         {
             triggeredFrom.positionCurve.Add(playerObject.transform.position);
             Rail destination = triggeredFrom.pressedToRail;
@@ -218,7 +307,7 @@ public class GameController : MonoBehaviour
             spline = new CatmullRom(triggeredFrom.positionCurve.ToArray(), 16, false);
 
         }
-        else if (!triggeredFrom.pressed && triggeredFrom.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+        else if (!pressed && triggeredFrom.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
         {
             triggeredFrom.positionCurve.Add(playerObject.transform.position);
             Rail destination = triggeredFrom.unpressedToRail;
@@ -239,10 +328,6 @@ public class GameController : MonoBehaviour
             spline = new CatmullRom(triggeredFrom.positionCurve.ToArray(), 16, false);
 
         }
-
-        isOnConnector = true;
-        isOnRail = false;
-        currentConnector = triggeredFrom;
     }
 
     IEnumerator startPlaying()
