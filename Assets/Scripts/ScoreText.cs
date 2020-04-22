@@ -17,7 +17,7 @@ public class ScoreText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        string scoreString = "Score: " + gmCtrl.score.ToString() + "\nCollectible: " + gmCtrl.collectibleCount;
+        string scoreString = "Score: " + gmCtrl.score.ToString() + "\nCollectible: " + gmCtrl.collectibleGot;
         scoreText.text = scoreString;
     }
 }

@@ -11,10 +11,12 @@ public class GameController : MonoBehaviour
     public GameObject playerObject;
     public Camera mainCamera;
     public ChargeIndicatorUI chargeIndicator;
+    public GameObject FButtonUI;
     public TMP_Text debugText;
     public TMP_Text judgeText;
     public AudioMixer mixer;
     public Canvas pauseMenu;
+    public GameObject gameOverPanel;
     public bool isPlaying;
     public bool isOnConnector;
     public bool isOnRail;
@@ -22,9 +24,15 @@ public class GameController : MonoBehaviour
     public int collectibleGot;
     public int collectibleCount;
     public int combo;
+    public int perfectCount;
+    public int goodCount;
+    public int missCount;
 
     public List<AreaData> areas;
     public float timeToLockCamera;
+    private Vector3 specificVector;
+    public float smoothSpeed;
+
     public float bpm;
     public float beatTimeOffset;
 
@@ -136,9 +144,11 @@ public class GameController : MonoBehaviour
                             isOnConnector = false;
                             isOnRail = true;
                         }
+                        chargeIndicator.gameObject.SetActive(false);
                     }
                     else if (currentConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
                     {
+                        chargeIndicator.gameObject.SetActive(false);
                         float endTime = currentConnector.unpressedEndTime > 0 ? currentConnector.unpressedEndTime : currentConnector.endTime;
                         float currentLerpTime = (gameTime - currentConnector.startTime) / (endTime - currentConnector.startTime);
                         //playerObject.transform.position = Vector3.Lerp(currentConnector.transform.position, Vector3.Lerp(currentConnector.unpressedToRail.transform.position, currentConnector.unpressedToRail.endPosition, (endTime - currentConnector.unpressedToRail.startTime) / (currentConnector.unpressedToRail.endTime - currentConnector.unpressedToRail.startTime)), currentLerpTime);
@@ -151,10 +161,18 @@ public class GameController : MonoBehaviour
                             isOnRail = true;
                         }
                     }
+                    else if (currentConnector.unpressedAction == ConnectorActionEnum.LEVEL_END)
+                    {
+                        isPlaying = false;
+                        playerObject.GetComponent<SpriteRenderer>().DOFade(0f, 1f);
+                        music.DOFade(0f, 1f);
+                        StartCoroutine(GameOver());
+                    }
                     else if (currentConnector.finished && currentConnector.unpressedAction == ConnectorActionEnum.NOTHING)
                     {
                         isOnConnector = false;
                         isOnRail = true;
+                        chargeIndicator.gameObject.SetActive(false);
                     }
                 }
                 playerObject.GetComponent<Animator>().SetBool("isNearConnector", false);
@@ -169,11 +187,27 @@ public class GameController : MonoBehaviour
 
             if (gameTime > timeToLockCamera)
             {
-                if (cameraOffset == Vector3.zero)
+                //    if (cameraOffset == Vector3.zero)
+                //    {
+                //        cameraOffset = mainCamera.transform.position - playerObject.transform.position;
+                //    }
+                //    mainCamera.transform.position = playerObject.transform.position + cameraOffset;
+                //
+                if (mainCamera.transform.position.y < playerObject.transform.position.y - 2)
                 {
-                    cameraOffset = mainCamera.transform.position - playerObject.transform.position;
+                    specificVector = new Vector3(playerObject.transform.position.x + 1, playerObject.transform.position.y - 2, mainCamera.transform.position.z);
+                    mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, specificVector, smoothSpeed * Time.deltaTime);
                 }
-                mainCamera.transform.position = playerObject.transform.position + cameraOffset;
+                else if (mainCamera.transform.position.y > playerObject.transform.position.y + 2)
+                {
+                    specificVector = new Vector3(playerObject.transform.position.x + 1, playerObject.transform.position.y + 2, mainCamera.transform.position.z);
+                    mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, specificVector, smoothSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    specificVector = new Vector3(playerObject.transform.position.x + 1, mainCamera.transform.position.y, mainCamera.transform.position.z);
+                    mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, specificVector, smoothSpeed * Time.deltaTime);
+                }
             }
 
             // find area
@@ -263,6 +297,15 @@ public class GameController : MonoBehaviour
         }
     }
     
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(1f);
+        gameOverPanel.SetActive(true);
+        gameOverPanel.GetComponent<GameOverUI>().updateUI(perfectCount, goodCount, missCount, collectibleGot, collectibleCount);
+        music.Stop();
+
+    }
+
     public void connectorTrigger(Connector triggeredFrom)
     {
         isOnConnector = true;

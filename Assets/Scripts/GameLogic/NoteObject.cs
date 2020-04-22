@@ -21,6 +21,7 @@ public class NoteObject : MonoBehaviour
         TryGetComponent<SpriteRenderer>(out spriteRenderer);
         thisRail = GetComponentInParent<Rail>();
         gmCtrl = FindObjectOfType<GameController>();
+        gmCtrl.collectibleCount++;
     }
 
     // Update is called once per frame
@@ -31,6 +32,11 @@ public class NoteObject : MonoBehaviour
             if (noteType == NoteObjectTypeEnum.HIT)
             {
                 float diffTime = gmCtrl.gameTime - time;
+                if (Mathf.Abs(diffTime) <= 0.25f)
+                {
+                    gmCtrl.FButtonUI.gameObject.SetActive(true);
+                }
+
                 if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.1f)
                 {
                     pressed = true;
@@ -66,6 +72,7 @@ public class NoteObject : MonoBehaviour
                         spriteRenderer.enabled = false;
                     }
                     finished = true;
+                    gmCtrl.FButtonUI.gameObject.SetActive(false);
                     gmCtrl.collectibleGot++;
                 }
 
@@ -75,6 +82,7 @@ public class NoteObject : MonoBehaviour
                     Debug.Log("missed! " + diffTime);
                     gmCtrl.judgeText.text = "miss";
                     gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(3);
+                    gmCtrl.FButtonUI.gameObject.SetActive(false);
                     finished = true;
                 }
             }
@@ -97,7 +105,7 @@ public class NoteObject : MonoBehaviour
                 }
             }
         }
-        else if (gmCtrl.gameTime > time + 2f)
+        else if (gmCtrl.gameTime > time + 3f)
         {
             gameObject.SetActive(false);
         }

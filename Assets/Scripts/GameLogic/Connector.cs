@@ -47,9 +47,11 @@ public class Connector : MonoBehaviour
         if (!finished && thisRail == gmCtrl.currentRail)
         {
             float diffTime = gmCtrl.gameTime - startTime;
-            if (Mathf.Abs(diffTime) <= 0.2f)
+            if (Mathf.Abs(diffTime) <= 0.25f && pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
             {
                 gmCtrl.playerObject.GetComponent<Animator>().SetBool("isNearConnector", true);
+                gmCtrl.chargeIndicator.gameObject.SetActive(true);
+                gmCtrl.chargeIndicator.updateChargeBar(0, 0, 1);
             }
 
             if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.15f)
@@ -60,12 +62,14 @@ public class Connector : MonoBehaviour
                     gmCtrl.judgeText.text = "perfect";
                     gmCtrl.score += pressedScore;
                     gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(0);
+                    gmCtrl.perfectCount++;
                 }
 
                 else if (Mathf.Abs(diffTime) > 0.035f)
                 {
                     gmCtrl.judgeText.text = "good:";
                     gmCtrl.score += pressedScore / 2;
+                    gmCtrl.goodCount++;
                     if (diffTime > 0)
                     {
                         Debug.Log("pressed! LATE:" + diffTime);
@@ -88,6 +92,7 @@ public class Connector : MonoBehaviour
             {
                 // missed
                 //Debug.Log("missed! " + diffTime);
+                gmCtrl.missCount++;
                 gmCtrl.judgeText.text = "miss";
                 gmCtrl.connectorTrigger(this);
                 finished = true;

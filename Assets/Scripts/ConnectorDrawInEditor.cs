@@ -30,36 +30,39 @@ public class ConnectorDrawInEditor : MonoBehaviour
             thisRail = GetComponentInParent<Rail>();
         }
 
-        if (thisConnector.startTime == 0f && thisConnector.endTime == 0f)
+        if (Application.isEditor && !Application.isPlaying)
         {
-            Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " has start and end time value at 0.", this);
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisConnector.startTime - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
-        }
+            if (thisConnector.startTime == 0f && thisConnector.endTime == 0f)
+            {
+                Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " has start and end time value at 0.", this);
+            }
+            else
+            {
+                transform.position = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisConnector.startTime - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+            }
 
-        if (pressedTimeWarning && thisConnector.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
-        {
-            if (!thisConnector.pressedToRail)
+            if (pressedTimeWarning && thisConnector.pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
             {
-                Debug.LogWarning("Rail to jump on a connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " is unassigned.", this);
+                if (!thisConnector.pressedToRail)
+                {
+                    Debug.LogWarning("Rail to jump on a connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " is unassigned.", this);
+                }
+                else if (thisConnector.endTime != thisConnector.pressedToRail.startTime)
+                {
+                    Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " pressed end time doesn't match with rail's start time.", this);
+                }
             }
-            else if (thisConnector.endTime != thisConnector.pressedToRail.startTime)
-            {
-                Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " pressed end time doesn't match with rail's start time.", this);
-            }
-        }
 
-        if (unpressedTimeWarning && thisConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
-        {
-            if (!thisConnector.unpressedToRail)
+            if (unpressedTimeWarning && thisConnector.unpressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
             {
-                Debug.LogWarning("Rail to jump on a connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " is unassigned.", this);
-            }
-            else if (thisConnector.unpressedEndTime != thisConnector.unpressedToRail.startTime)
-            {
-                Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " unpressed end time doesn't match with rail's start time.", this);
+                if (!thisConnector.unpressedToRail)
+                {
+                    Debug.LogWarning("Rail to jump on a connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " is unassigned.", this);
+                }
+                else if (thisConnector.unpressedEndTime != thisConnector.unpressedToRail.startTime)
+                {
+                    Debug.LogWarning("A connector named \"" + thisConnector.name + "\" on rail named " + thisRail.name + " unpressed end time doesn't match with rail's start time.", this);
+                }
             }
         }
     }
