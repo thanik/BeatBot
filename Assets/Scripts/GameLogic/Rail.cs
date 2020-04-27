@@ -11,7 +11,6 @@ public class Rail : MonoBehaviour
     public Vector3 endPosition;
 
     public PlatformTypeEnum platformType;
-    public PlatformSizeEnum platformSize;
     // Start is called before the first frame update
     void Start()
     {

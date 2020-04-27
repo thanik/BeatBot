@@ -47,17 +47,17 @@ public class Connector : MonoBehaviour
         if (!finished && thisRail == gmCtrl.currentRail)
         {
             float diffTime = gmCtrl.gameTime - startTime;
-            if (Mathf.Abs(diffTime) <= 0.25f && pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
+            if (Mathf.Abs(diffTime) <= 0.3f && pressedAction == ConnectorActionEnum.JUMP_TO_RAIL)
             {
                 gmCtrl.playerObject.GetComponent<Animator>().SetBool("isNearConnector", true);
                 gmCtrl.chargeIndicator.gameObject.SetActive(true);
                 gmCtrl.chargeIndicator.updateChargeBar(0, 0, 1);
             }
 
-            if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.15f)
+            if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.25f)
             {
                 pressed = true;
-                if (Mathf.Abs(diffTime) <= 0.035f)
+                if (Mathf.Abs(diffTime) <= 0.05f)
                 {
                     gmCtrl.judgeText.text = "perfect";
                     gmCtrl.score += pressedScore;
@@ -65,7 +65,7 @@ public class Connector : MonoBehaviour
                     gmCtrl.perfectCount++;
                 }
 
-                else if (Mathf.Abs(diffTime) > 0.035f)
+                else if (Mathf.Abs(diffTime) > 0.05f)
                 {
                     gmCtrl.judgeText.text = "good:";
                     gmCtrl.score += pressedScore / 2;
@@ -88,7 +88,7 @@ public class Connector : MonoBehaviour
                 gmCtrl.playerObject.GetComponent<Animator>().SetBool("isNearConnector", false);
             }
             
-            if (!pressed && diffTime > 0.15f)
+            if (!pressed && diffTime > 0.25f)
             {
                 // missed
                 //Debug.Log("missed! " + diffTime);
