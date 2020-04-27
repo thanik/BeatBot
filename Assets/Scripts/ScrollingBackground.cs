@@ -30,7 +30,7 @@ public class ScrollingBackground : MonoBehaviour
             {
                 Vector3 localPos = backgrounds[i].localPosition;
                 cameraY = -mainCamera.transform.position.y;
-                backgrounds[i].localPosition = new Vector3(localPos.x + moveX, cameraY, localPos.z);
+                backgrounds[i].localPosition = new Vector3(localPos.x + moveX, localPos.y, localPos.z);
                 
                 if (backgrounds[i].localPosition.x < -resetPos.x)
                 {

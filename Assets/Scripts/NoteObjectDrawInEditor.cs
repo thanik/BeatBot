@@ -26,16 +26,19 @@ public class NoteObjectDrawInEditor : MonoBehaviour
             thisRail = GetComponentInParent<Rail>();
         }
 
-        if (thisNote.time == 0f)
+        if (Application.isEditor && !Application.isPlaying)
         {
-            Debug.LogWarning("A note named \"" + thisNote.name + "\" on rail named " + thisRail.name + " has time value at 0.", this);
-        }
-        else
-        {
-            Vector3 calculatedPos = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisNote.time - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
-            calculatedPos.y += yOffset;
-            transform.position = calculatedPos;
+            if (thisNote.time == 0f)
+            {
+                Debug.LogWarning("A note named \"" + thisNote.name + "\" on rail named " + thisRail.name + " has time value at 0.", this);
+            }
+            else
+            {
+                Vector3 calculatedPos = Vector3.Lerp(thisRail.transform.position, thisRail.endPosition, (thisNote.time - thisRail.startTime) / (thisRail.endTime - thisRail.startTime));
+                calculatedPos.y += yOffset;
+                transform.position = calculatedPos;
 
+            }
         }
     }
 }

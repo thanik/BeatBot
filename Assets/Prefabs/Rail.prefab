@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectors: []
-  movingSpeed: 1
   startTime: 0
   endTime: 0
   endPosition: {x: 0, y: 0, z: 0}
@@ -110,10 +109,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8434d627414c1c4c80db237a43ee982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
-  railId: 1
   buttonName: Jump
   startTime: 0
+  holdUntilTime: 0
   endTime: 0
   pressedAction: 1
   pressedToRail: {fileID: 0}
@@ -167,7 +165,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6814046921049042717}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6196271826993116430}

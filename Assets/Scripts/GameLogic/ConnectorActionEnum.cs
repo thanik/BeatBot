@@ -5,5 +5,6 @@ using UnityEngine;
 public enum ConnectorActionEnum
 { 
     NOTHING,
-    JUMP_TO_RAIL
+    JUMP_TO_RAIL,
+    LEVEL_END
 }

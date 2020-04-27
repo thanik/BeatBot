@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteType: 1
   time: 0
-  buttonName: Fire1
+  buttonName: PickUp
   pressedSound: {fileID: 0}
   pressed: 0
   finished: 0
@@ -211,3 +211,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d404a66df9359d4db9d6b8ecd3bf0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  yOffset: -0.1

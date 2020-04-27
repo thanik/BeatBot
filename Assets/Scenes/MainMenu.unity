@@ -1457,7 +1457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentPage: {fileID: 0}
   backgroundMusic: {fileID: 571516406}
-  yOffset: 165
+  yOffset: 155
   jumpPower: 80
 --- !u!114 &2083032897
 MonoBehaviour:
