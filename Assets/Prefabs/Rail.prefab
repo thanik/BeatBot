@@ -51,7 +51,6 @@ MonoBehaviour:
   endTime: 0
   endPosition: {x: 0, y: 0, z: 0}
   platformType: 0
-  platformSize: 0
 --- !u!114 &6196271826993116431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,4 +199,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7b5b38e7787986c4a87d60e0519bf266, type: 3}
   - {fileID: 21300000, guid: c340023f43e3e3f4dbdd284e2b21a382, type: 3}
   - {fileID: 21300000, guid: b6e965aa0dd2f67489d601d1826d0101, type: 3}
+  underwaterSprites:
+  - {fileID: 21300000, guid: 603e1aa0b7b6f9849a7760398f721b27, type: 3}
+  - {fileID: 21300000, guid: 4d7369eb772507f408f060c22736234f, type: 3}
+  - {fileID: 21300000, guid: cafa0450ce9405d498caf2f7766ef499, type: 3}
+  - {fileID: 21300000, guid: c6627f56b65523c49be2a3a256f3f983, type: 3}
+  - {fileID: 21300000, guid: 45286276db52cb04c8ff67b196ef9910, type: 3}
+  - {fileID: 21300000, guid: 8f90889cc4145f44a83f7c1780b8b8bd, type: 3}
+  underwaterSolidSprites:
+  - {fileID: 21300000, guid: ea18a130da899644382f03519021da16, type: 3}
+  - {fileID: 21300000, guid: 4ed1c90546f600440ae6447bf8379ae5, type: 3}
+  - {fileID: 21300000, guid: 8aae53fab238cfc4cb1cc0eabcb29aa6, type: 3}
+  - {fileID: 21300000, guid: 24531878987359e4a80fcb22b95362d7, type: 3}
+  - {fileID: 21300000, guid: 9445570e797822341b2d3581c6b879d6, type: 3}
+  - {fileID: 21300000, guid: 6934875a007654648a24e7b138507746, type: 3}
+  - {fileID: 21300000, guid: 39f8f277ccc57514fb4c02311fe5838d, type: 3}
   platforms: []

@@ -32,21 +32,21 @@ public class NoteObject : MonoBehaviour
             if (noteType == NoteObjectTypeEnum.HIT)
             {
                 float diffTime = gmCtrl.gameTime - time;
-                if (Mathf.Abs(diffTime) <= 0.25f)
+                if (Mathf.Abs(diffTime) <= 0.3f)
                 {
                     gmCtrl.FButtonUI.gameObject.SetActive(true);
                 }
 
-                if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.1f)
+                if (Input.GetButtonDown(buttonName) && Mathf.Abs(diffTime) <= 0.25f)
                 {
                     pressed = true;
-                    if (Mathf.Abs(diffTime) <= 0.03f)
+                    if (Mathf.Abs(diffTime) <= 0.05f)
                     {
                         gmCtrl.judgeText.text = "perfect";
                         gmCtrl.playerObject.GetComponentInChildren<JudgementFont>().triggerJudge(0);
                     }
 
-                    else if (Mathf.Abs(diffTime) > 0.03f)
+                    else if (Mathf.Abs(diffTime) > 0.05f)
                     {
                         FindObjectOfType<GameController>().judgeText.text = "good:";
                         if (diffTime > 0)
@@ -76,7 +76,7 @@ public class NoteObject : MonoBehaviour
                     gmCtrl.collectibleGot++;
                 }
 
-                if (!pressed && diffTime > 0.1f)
+                if (!pressed && diffTime > 0.25f)
                 {
                     // missed
                     Debug.Log("missed! " + diffTime);
@@ -105,7 +105,7 @@ public class NoteObject : MonoBehaviour
                 }
             }
         }
-        else if (gmCtrl.gameTime > time + 3f)
+        else if (gmCtrl.gameTime > time + 5f)
         {
             gameObject.SetActive(false);
         }
