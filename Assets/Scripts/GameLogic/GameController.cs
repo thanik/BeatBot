@@ -218,7 +218,7 @@ public class GameController : MonoBehaviour
             if (playerObject.transform.position.y < -2 && !stillInWater)
             {
                 fallTrigger = true;
-                mixer.SetFloat("lowPassFreq", 4000);
+                mixer.SetFloat("lowPassFreq", 2000);
             }
             else if (playerObject.transform.position.y > -2)
             {

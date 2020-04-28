@@ -100,7 +100,7 @@ public class NoteObject : MonoBehaviour
                     {
                         pressedSound.Play();
                     }
-
+                    gmCtrl.collectibleGot++;
                     finished = true;
                 }
             }
