@@ -2910,7 +2910,7 @@ MonoBehaviour:
     songEffectPercentage: 10000
     songEffectType: 0
   timeToLockCamera: 1.25
-  smoothSpeed: 2
+  smoothSpeed: 6
   bpm: 0
   beatTimeOffset: 0
   gameTime: 0
